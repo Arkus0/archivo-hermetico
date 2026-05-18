@@ -48,8 +48,8 @@ export default function ResultScreen({ result, onRestart, onEnter }) {
           <div style={{ fontFamily: fontMono, fontSize: "13px", letterSpacing: "2px", color: colors.bordoDeep }}>
             Expediente {result.file_number}
           </div>
-          <p style={{ fontFamily: fontBody, fontStyle: "italic", fontSize: "18px", color: colors.ink, opacity: 0.85, margin: "14px auto 0 auto", maxWidth: "520px", lineHeight: 1.45 }}>
-            Tres rostros se han iluminado en el archivo. Puedes leer el dictamen y, si te atreves, encarnarte en uno: la ficha de personaje y el plano de Madrid te esperan al final.
+          <p style={{ fontFamily: fontBody, fontStyle: "italic", fontSize: "18px", color: colors.ink, opacity: 0.85, margin: "14px auto 0 auto", maxWidth: "560px", lineHeight: 1.45 }}>
+            Tres rostros han ardido en el archivo. Lee el dictamen; si te atreves, encarna a uno de ellos: te aguardan la ficha de personaje y el plano hermético de Madrid.
           </p>
         </div>
 
@@ -69,7 +69,7 @@ export default function ResultScreen({ result, onRestart, onEnter }) {
                   {m.match_percent}<span style={{ fontSize: "22px" }}>%</span>
                 </div>
                 <div style={{ fontFamily: fontMono, fontSize: "9px", letterSpacing: "2px", color: colors.bordoDeep, textTransform: "uppercase", marginTop: "2px" }}>
-                  Afinidad hermética
+                  Grado de afinidad
                 </div>
               </div>
             </div>
