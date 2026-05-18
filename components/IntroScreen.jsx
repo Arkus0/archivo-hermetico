@@ -14,7 +14,7 @@ function makeIntroFileNumber() {
   return `${a}-${year}-${b}-${c}`;
 }
 
-export default function IntroScreen({ onStart }) {
+export default function IntroScreen({ onStart, onContinue }) {
   const [mode, setMode] = useState(30);
   const fileNum = useRef(makeIntroFileNumber()).current;
 
@@ -95,24 +95,45 @@ export default function IntroScreen({ onStart }) {
           </div>
         </div>
 
-        <button
-          onClick={() => onStart(mode)}
-          style={{
-            fontFamily: fontDisplay,
-            background: colors.bordo,
-            color: colors.paperLight,
-            border: `1px solid ${colors.bordoDeep}`,
-            padding: "18px 52px",
-            fontSize: "24px",
-            letterSpacing: "5px",
-            textTransform: "uppercase",
-            cursor: "pointer",
-            marginTop: "8px",
-            boxShadow: `2px 2px 0 ${colors.ink}`,
-          }}
-        >
-          Abrir Expediente
-        </button>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10, alignItems: "center" }}>
+          <button
+            onClick={() => onStart(mode)}
+            style={{
+              fontFamily: fontDisplay,
+              background: colors.bordo,
+              color: colors.paperLight,
+              border: `1px solid ${colors.bordoDeep}`,
+              padding: "18px 52px",
+              fontSize: "24px",
+              letterSpacing: "5px",
+              textTransform: "uppercase",
+              cursor: "pointer",
+              marginTop: "8px",
+              boxShadow: `2px 2px 0 ${colors.ink}`,
+            }}
+          >
+            Abrir Expediente
+          </button>
+          {onContinue && (
+            <button
+              onClick={onContinue}
+              style={{
+                fontFamily: fontMono,
+                background: colors.paperLight,
+                color: colors.ink,
+                border: `1px solid ${colors.ink}`,
+                padding: "10px 28px",
+                fontSize: "13px",
+                letterSpacing: "3px",
+                textTransform: "uppercase",
+                cursor: "pointer",
+              }}
+              title="Cargar partida guardada en este navegador"
+            >
+              ↺ Continuar partida guardada
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
