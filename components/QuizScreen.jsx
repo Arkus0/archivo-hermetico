@@ -9,7 +9,7 @@ export default function QuizScreen({ questions, answers, currentIdx, onAnswer, o
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", color: colors.ink }}>
       <div style={{ padding: "20px 32px", borderBottom: `1px solid ${colors.bordo}`, background: colors.paperLight }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontFamily: fontMono, fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase", color: colors.bordo }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontFamily: fontMono, fontSize: "13px", letterSpacing: "2px", textTransform: "uppercase", color: colors.bordo }}>
           <span>Expediente {fileNumber}</span>
           <span>{currentIdx + 1} <span style={{ opacity: 0.5 }}>/ {questions.length}</span></span>
         </div>
@@ -19,16 +19,16 @@ export default function QuizScreen({ questions, answers, currentIdx, onAnswer, o
       </div>
 
       <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "48px 24px" }}>
-        <div style={{ maxWidth: "680px", width: "100%" }}>
-          <div style={{ fontFamily: fontMono, fontSize: "11px", letterSpacing: "3px", color: colors.bordo, textTransform: "uppercase", marginBottom: "16px", textAlign: "center" }}>
+        <div style={{ maxWidth: "760px", width: "100%" }}>
+          <div style={{ fontFamily: fontMono, fontSize: "13px", letterSpacing: "3px", color: colors.bordo, textTransform: "uppercase", marginBottom: "20px", textAlign: "center" }}>
             Pregunta {currentIdx + 1}
           </div>
 
-          <h2 style={{ fontFamily: fontDisplay, fontSize: "30px", lineHeight: "1.3", textAlign: "center", marginBottom: "36px", color: colors.ink, fontWeight: "normal" }}>
+          <h2 style={{ fontFamily: fontDisplay, fontSize: "36px", lineHeight: "1.3", textAlign: "center", marginBottom: "40px", color: colors.ink, fontWeight: "normal" }}>
             {q.text}
           </h2>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
             {q.options.map((opt, i) => {
               const letter = ["A", "B", "C", "D"][i];
               return (
@@ -37,15 +37,15 @@ export default function QuizScreen({ questions, answers, currentIdx, onAnswer, o
                   onClick={() => onAnswer(i)}
                   style={{
                     fontFamily: fontBody,
-                    fontSize: "18px",
+                    fontSize: "21px",
                     textAlign: "left",
                     background: colors.paperLight,
                     color: colors.ink,
                     border: `1px solid ${colors.ink}`,
-                    padding: "16px 22px",
+                    padding: "18px 24px",
                     cursor: "pointer",
                     transition: "all 0.15s",
-                    lineHeight: "1.35",
+                    lineHeight: "1.4",
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.background = colors.ink;
@@ -56,7 +56,7 @@ export default function QuizScreen({ questions, answers, currentIdx, onAnswer, o
                     e.currentTarget.style.color = colors.ink;
                   }}
                 >
-                  <span style={{ fontFamily: fontMono, fontSize: "13px", marginRight: "14px", letterSpacing: "1px", opacity: 0.7 }}>{letter}.</span>
+                  <span style={{ fontFamily: fontMono, fontSize: "15px", marginRight: "16px", letterSpacing: "1px", opacity: 0.7 }}>{letter}.</span>
                   {opt}
                 </button>
               );
@@ -64,12 +64,12 @@ export default function QuizScreen({ questions, answers, currentIdx, onAnswer, o
           </div>
 
           {currentIdx > 0 && (
-            <div style={{ marginTop: "24px", textAlign: "center" }}>
+            <div style={{ marginTop: "28px", textAlign: "center" }}>
               <button
                 onClick={onBack}
                 style={{
                   fontFamily: fontMono,
-                  fontSize: "11px",
+                  fontSize: "13px",
                   letterSpacing: "2px",
                   textTransform: "uppercase",
                   background: "transparent",

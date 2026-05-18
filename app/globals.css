@@ -24,6 +24,8 @@ body {
   background-attachment: fixed;
   color: #1A1410;
   font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 19px;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -56,5 +58,6 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 @media (max-width: 640px) {
-  h1 { font-size: 38px !important; }
+  body { font-size: 17px; }
+  h1 { font-size: 42px !important; }
 }

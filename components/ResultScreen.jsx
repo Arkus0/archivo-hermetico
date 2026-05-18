@@ -4,7 +4,7 @@ import { useState } from "react";
 import { MiniOrnament } from "./Seal.jsx";
 import { colors, fontDisplay, fontBody, fontMono } from "@/lib/constants.js";
 
-export default function ResultScreen({ result, onRestart }) {
+export default function ResultScreen({ result, onRestart, onEnter }) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -42,12 +42,15 @@ export default function ResultScreen({ result, onRestart }) {
           <div style={{ fontFamily: fontMono, fontSize: "11px", letterSpacing: "3px", color: colors.bordo, textTransform: "uppercase", marginBottom: "6px" }}>
             Dictamen preliminar
           </div>
-          <h1 style={{ fontFamily: fontDisplay, fontSize: "44px", letterSpacing: "3px", margin: "0 0 6px 0", color: colors.ink, fontWeight: "normal" }}>
+          <h1 style={{ fontFamily: fontDisplay, fontSize: "52px", letterSpacing: "3px", margin: "0 0 6px 0", color: colors.ink, fontWeight: "normal" }}>
             ARCHIVO HERMÉTICO
           </h1>
-          <div style={{ fontFamily: fontMono, fontSize: "12px", letterSpacing: "2px", color: colors.bordoDeep }}>
+          <div style={{ fontFamily: fontMono, fontSize: "13px", letterSpacing: "2px", color: colors.bordoDeep }}>
             Expediente {result.file_number}
           </div>
+          <p style={{ fontFamily: fontBody, fontStyle: "italic", fontSize: "18px", color: colors.ink, opacity: 0.85, margin: "14px auto 0 auto", maxWidth: "520px", lineHeight: 1.45 }}>
+            Tres rostros se han iluminado en el archivo. Puedes leer el dictamen y, si te atreves, encarnarte en uno: la ficha de personaje y el plano de Madrid te esperan al final.
+          </p>
         </div>
 
         {result.matches.map((m, i) => (
@@ -57,13 +60,13 @@ export default function ResultScreen({ result, onRestart }) {
                 <div style={{ fontFamily: fontMono, fontSize: "10px", letterSpacing: "3px", color: colors.bordo, textTransform: "uppercase" }}>
                   {["Coincidencia primera", "Coincidencia segunda", "Coincidencia tercera"][i]}
                 </div>
-                <h3 style={{ fontFamily: fontDisplay, fontSize: "28px", letterSpacing: "1px", margin: "4px 0 0 0", color: colors.ink, fontWeight: "normal", lineHeight: 1.15 }}>
+                <h3 style={{ fontFamily: fontDisplay, fontSize: "32px", letterSpacing: "1px", margin: "4px 0 0 0", color: colors.ink, fontWeight: "normal", lineHeight: 1.15 }}>
                   {m.name}
                 </h3>
               </div>
               <div style={{ textAlign: "right" }}>
-                <div style={{ fontFamily: fontDisplay, fontSize: "38px", color: colors.bordo, lineHeight: 1 }}>
-                  {m.match_percent}<span style={{ fontSize: "20px" }}>%</span>
+                <div style={{ fontFamily: fontDisplay, fontSize: "46px", color: colors.bordo, lineHeight: 1 }}>
+                  {m.match_percent}<span style={{ fontSize: "22px" }}>%</span>
                 </div>
                 <div style={{ fontFamily: fontMono, fontSize: "9px", letterSpacing: "2px", color: colors.bordoDeep, textTransform: "uppercase", marginTop: "2px" }}>
                   Afinidad hermética
@@ -72,27 +75,49 @@ export default function ResultScreen({ result, onRestart }) {
             </div>
 
             <div style={{ padding: "20px 28px 24px 28px" }}>
-              <div style={{ fontFamily: fontMono, fontSize: "12px", letterSpacing: "1px", color: colors.bordoDeep, marginBottom: "16px", fontStyle: "italic" }}>
+              <div style={{ fontFamily: fontMono, fontSize: "13px", letterSpacing: "1px", color: colors.bordoDeep, marginBottom: "16px", fontStyle: "italic" }}>
                 {m.epitaph}
               </div>
-              <div style={{ fontFamily: fontBody, fontSize: "17px", lineHeight: "1.6", color: colors.ink, whiteSpace: "pre-wrap", marginBottom: m.hits && m.hits.length > 0 ? "20px" : 0 }}>
+              <div style={{ fontFamily: fontBody, fontSize: "19px", lineHeight: "1.6", color: colors.ink, whiteSpace: "pre-wrap", marginBottom: m.hits && m.hits.length > 0 ? "20px" : 0 }}>
                 {m.justification}
               </div>
 
               {m.hits && m.hits.length > 0 && (
                 <div style={{ marginTop: "20px", paddingTop: "16px", borderTop: `1px dashed ${colors.bordoDeep}` }}>
-                  <div style={{ fontFamily: fontMono, fontSize: "10px", letterSpacing: "2px", color: colors.bordo, textTransform: "uppercase", marginBottom: "10px" }}>
+                  <div style={{ fontFamily: fontMono, fontSize: "11px", letterSpacing: "2px", color: colors.bordo, textTransform: "uppercase", marginBottom: "10px" }}>
                     Coincidencias específicas registradas
                   </div>
                   <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
                     {m.hits.map((h, j) => (
-                      <li key={j} style={{ fontFamily: fontBody, fontSize: "15px", color: colors.ink, marginBottom: "6px", paddingLeft: "16px", position: "relative" }}>
+                      <li key={j} style={{ fontFamily: fontBody, fontSize: "17px", color: colors.ink, marginBottom: "6px", paddingLeft: "16px", position: "relative" }}>
                         <span style={{ position: "absolute", left: 0, color: colors.bordo }}>›</span>
                         <span style={{ fontStyle: "italic", color: colors.bordoDeep }}>{h.qText}</span>
                         <span style={{ marginLeft: "6px" }}>→ {h.answerText}</span>
                       </li>
                     ))}
                   </ul>
+                </div>
+              )}
+
+              {onEnter && (
+                <div style={{ marginTop: "22px", paddingTop: "18px", borderTop: `1px solid ${colors.bordoDeep}`, display: "flex", justifyContent: "flex-end" }}>
+                  <button
+                    onClick={() => onEnter(m)}
+                    style={{
+                      fontFamily: fontDisplay,
+                      fontSize: "16px",
+                      letterSpacing: "3px",
+                      textTransform: "uppercase",
+                      background: i === 0 ? colors.bordo : colors.paperLight,
+                      color: i === 0 ? colors.paperLight : colors.ink,
+                      border: `1px solid ${colors.ink}`,
+                      padding: "12px 22px",
+                      cursor: "pointer",
+                      boxShadow: `2px 2px 0 ${colors.ink}`,
+                    }}
+                  >
+                    Encarnar este personaje →
+                  </button>
                 </div>
               )}
             </div>
@@ -103,7 +128,7 @@ export default function ResultScreen({ result, onRestart }) {
           <div style={{ fontFamily: fontMono, fontSize: "10px", letterSpacing: "4px", color: colors.bordo, textTransform: "uppercase", marginBottom: "14px" }}>
             Sentencia de archivo
           </div>
-          <p style={{ fontFamily: fontDisplay, fontStyle: "italic", fontSize: "24px", lineHeight: "1.4", color: colors.ink, margin: 0 }}>
+          <p style={{ fontFamily: fontDisplay, fontStyle: "italic", fontSize: "28px", lineHeight: "1.4", color: colors.ink, margin: 0 }}>
             «{result.verdict}»
           </p>
           <div style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
