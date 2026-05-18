@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { colors, fontDisplay, fontBody, fontMono } from "@/lib/constants.js";
 import { MADRID_LOCATIONS, LOCATION_TYPE_LABEL, LOCATION_TYPE_COLOR } from "@/lib/madridLocations.js";
+import { SponsorOrbit, PoliticianTooltip } from "./PoliticianMarker.jsx";
 
 const MIN_LAT = 40.392;
 const MAX_LAT = 40.437;
@@ -66,13 +67,15 @@ function TypeGlyph({ type, size = 12 }) {
   }
 }
 
-export default function MadridMap({ selectedId: controlledSelectedId, onSelect, control = {} }) {
+export default function MadridMap({ selectedId: controlledSelectedId, onSelect, control = {}, onPoliticianClick, politicianDispositions = {} }) {
   const [internalSelectedId, setInternalSelectedId] = useState(MADRID_LOCATIONS[0].id);
   const selectedId = controlledSelectedId ?? internalSelectedId;
   const setSelectedId = onSelect ?? setInternalSelectedId;
   const [filter, setFilter] = useState("all");
   const [query, setQuery] = useState("");
   const [hoveredId, setHoveredId] = useState(null);
+  const [hoveredPoliticianId, setHoveredPoliticianId] = useState(null);
+  const [hoveredPoliticianPos, setHoveredPoliticianPos] = useState(null);
 
   const visible = useMemo(
     () => MADRID_LOCATIONS.filter((l) => (filter === "all" || l.type === filter) && l.name.toLowerCase().includes(query.toLowerCase())),
@@ -316,7 +319,7 @@ export default function MadridMap({ selectedId: controlledSelectedId, onSelect, 
                   <TypeGlyph type={loc.type} size={r * 1.4} />
                 </g>
                 {/* Cartela activa/hover */}
-                {(active || hover) && (
+                {(active || hover) && !hoveredPoliticianId && (
                   <g pointerEvents="none">
                     <rect x={x + 22} y={y - 26} rx="2" ry="2" width={loc.name.length * 7.4 + 18} height="22" fill={colors.paperLight} stroke={colors.ink} strokeWidth="1" />
                     <rect x={x + 22} y={y - 26} rx="2" ry="2" width="3" height="22" fill={c} />
@@ -325,9 +328,29 @@ export default function MadridMap({ selectedId: controlledSelectedId, onSelect, 
                     </text>
                   </g>
                 )}
+                {/* Orbital de patrocinadores (políticos) */}
+                {(active || hover) && (
+                  <SponsorOrbit
+                    locationId={loc.id}
+                    cx={x} cy={y}
+                    orbitR={r + 14}
+                    onClick={(pid) => onPoliticianClick?.(pid, loc.id)}
+                    hoveredId={hoveredPoliticianId}
+                    setHoveredId={(pid) => { setHoveredPoliticianId(pid); setHoveredPoliticianPos(pid ? { x, y } : null); }}
+                  />
+                )}
               </g>
             );
           })}
+          {/* Tooltip de político en hover */}
+          {hoveredPoliticianId && hoveredPoliticianPos && (
+            <PoliticianTooltip
+              politicianId={hoveredPoliticianId}
+              x={hoveredPoliticianPos.x}
+              y={hoveredPoliticianPos.y}
+              disposition={politicianDispositions[hoveredPoliticianId] ?? 0}
+            />
+          )}
 
           {/* Viñeta */}
           <rect x="0" y="0" width="1000" height="700" fill="url(#vignette)" pointerEvents="none" />
