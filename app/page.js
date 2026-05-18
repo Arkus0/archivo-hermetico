@@ -11,6 +11,14 @@ import { QUESTION_BANK } from "@/lib/questions.js";
 import { runMatcher, shuffle } from "@/lib/matcher.js";
 import { computeStats } from "@/lib/stats.js";
 
+function buildCampaignProfile(match) {
+  if (!match) return { primary: "influence", primaryLabel: "Influencia", secondaryLabel: "Controlar 2 enclaves de saber", initialThreat: 0 };
+  if (match.match_percent >= 75) return { primary: "control", primaryLabel: "Control territorial", secondaryLabel: "Asegurar 3 enclaves distintos", initialThreat: 1 };
+  if (match.id.includes("franco") || match.id.includes("carrero")) return { primary: "stability", primaryLabel: "Estabilidad del régimen", secondaryLabel: "Terminar con amenaza 3 o menos", initialThreat: 2 };
+  return { primary: "influence", primaryLabel: "Influencia política", secondaryLabel: "Ganar 16 de influencia", initialThreat: 0 };
+}
+
+
 export default function Home() {
   const [phase, setPhase] = useState("intro");
   const [questions, setQuestions] = useState([]);
@@ -73,12 +81,14 @@ export default function Home() {
 
   const handleEnterGame = (match) => {
     const stats = computeStats(match.id, questions, answers);
+    const campaignProfile = buildCampaignProfile(match);
     setPendingCharacter({
       politician: { id: match.id, name: match.name, epitaph: match.epitaph },
       stats,
       matchPercent: match.match_percent,
       fileNumber: result?.file_number ?? "",
       answers,
+      campaignProfile,
     });
     setPhase("creation");
     window.scrollTo({ top: 0, behavior: "instant" });
