@@ -3,103 +3,58 @@
 import { Seal } from "./Seal.jsx";
 import { colors, fontDisplay, fontBody, fontMono } from "@/lib/constants.js";
 import { statKeys, statMeta } from "@/lib/stats.js";
+import { buildPerks } from "@/lib/perks.js";
+import { buildStatuses } from "@/lib/statusEffects.js";
 
 function StatBar({ value }) {
   const pips = Array.from({ length: 10 }, (_, i) => i < value);
-  return (
-    <div style={{ display: "flex", gap: "3px" }}>
-      {pips.map((on, i) => (
-        <div
-          key={i}
-          style={{
-            width: "14px",
-            height: "16px",
-            background: on ? colors.bordo : "transparent",
-            border: `1px solid ${on ? colors.bordoDeep : colors.ink}`,
-            opacity: on ? 1 : 0.4,
-          }}
-        />
-      ))}
-    </div>
-  );
+  return <div style={{ display: "flex", gap: "3px" }}>{pips.map((on, i) => <div key={i} style={{ width: "12px", height: "14px", background: on ? colors.bordo : "transparent", border: `1px solid ${on ? colors.bordoDeep : colors.ink}`, opacity: on ? 1 : 0.35 }} />)}</div>;
 }
 
 export default function CharacterSheet({ character }) {
-  const { politician, stats, matchPercent, fileNumber } = character;
+  const { politician, stats, matchPercent, fileNumber, answers = [] } = character;
   const keys = statKeys();
+  const mundanos = keys.slice(0, 5);
+  const ocultistas = keys.slice(5);
+  const perks = buildPerks(stats);
+  const statuses = buildStatuses(answers);
 
-  return (
-    <div style={{ background: colors.paperLight, border: `1px solid ${colors.ink}`, boxShadow: `4px 4px 0 ${colors.bordo}` }}>
-      {/* Cabecera */}
-      <div style={{ borderBottom: `1px solid ${colors.ink}`, padding: "20px 24px", background: colors.paper, display: "flex", alignItems: "center", gap: "20px" }}>
-        <div style={{ flexShrink: 0 }}>
-          <Seal size={90} />
-        </div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontFamily: fontMono, fontSize: "11px", letterSpacing: "3px", color: colors.bordo, textTransform: "uppercase", marginBottom: "4px" }}>
-            Ficha de personaje · Expediente {fileNumber}
-          </div>
-          <h2 style={{ fontFamily: fontDisplay, fontSize: "30px", letterSpacing: "1px", margin: 0, color: colors.ink, fontWeight: "normal", lineHeight: 1.1 }}>
-            {politician.name}
-          </h2>
-          <div style={{ fontFamily: fontMono, fontSize: "11px", letterSpacing: "1px", color: colors.bordoDeep, marginTop: "6px", fontStyle: "italic" }}>
-            {politician.epitaph}
-          </div>
-        </div>
-        <div style={{ textAlign: "right", flexShrink: 0 }}>
-          <div style={{ fontFamily: fontDisplay, fontSize: "40px", color: colors.bordo, lineHeight: 1 }}>
-            {matchPercent}<span style={{ fontSize: "20px" }}>%</span>
-          </div>
-          <div style={{ fontFamily: fontMono, fontSize: "9px", letterSpacing: "2px", color: colors.bordoDeep, textTransform: "uppercase", marginTop: "2px" }}>
-            Afinidad
-          </div>
-        </div>
-      </div>
+  const renderRows = (list) => list.map((k) => {
+    const meta = statMeta(k);
+    return <div key={k} style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+      <div style={{ minWidth: "170px" }}><div style={{ fontFamily: fontDisplay, fontSize: "18px" }}><span style={{ color: colors.bordo, marginRight: 6 }}>{meta.glyph}</span>{meta.label}</div><div style={{ fontFamily: fontBody, fontSize: "12px", color: colors.bordoDeep, fontStyle: "italic" }}>{meta.description}</div></div>
+      <StatBar value={stats[k]} /><div style={{ fontFamily: fontDisplay }}>{stats[k]}/10</div>
+    </div>;
+  });
 
-      {/* Stats */}
-      <div style={{ padding: "24px 28px", borderBottom: `1px dashed ${colors.bordoDeep}` }}>
-        <div style={{ fontFamily: fontMono, fontSize: "11px", letterSpacing: "3px", color: colors.bordo, textTransform: "uppercase", marginBottom: "16px" }}>
-          Atributos herméticos
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-          {keys.map((k) => {
-            const meta = statMeta(k);
-            return (
-              <div key={k} style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-                <div style={{ minWidth: "140px" }}>
-                  <div style={{ fontFamily: fontDisplay, fontSize: "20px", color: colors.ink, letterSpacing: "1px", display: "flex", alignItems: "center", gap: "8px" }}>
-                    <span style={{ color: colors.bordo, fontSize: "18px" }}>{meta.glyph}</span>
-                    {meta.label}
-                  </div>
-                  <div style={{ fontFamily: fontBody, fontSize: "13px", fontStyle: "italic", color: colors.bordoDeep, lineHeight: 1.25, marginTop: "2px" }}>
-                    {meta.description}
-                  </div>
-                </div>
-                <div style={{ flex: 1, display: "flex", alignItems: "center", gap: "12px" }}>
-                  <StatBar value={stats[k]} />
-                  <div style={{ fontFamily: fontDisplay, fontSize: "22px", color: colors.ink, minWidth: "32px" }}>
-                    {stats[k]}<span style={{ fontSize: "13px", color: colors.bordoDeep }}>/10</span>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+  return <div style={{ background: colors.paperLight, border: `1px solid ${colors.ink}`, boxShadow: `4px 4px 0 ${colors.bordo}` }}>
+    <div style={{ borderBottom: `1px solid ${colors.ink}`, padding: "20px 24px", background: colors.paper, display: "flex", gap: 20 }}>
+      <Seal size={90} />
+      <div style={{ flex: 1 }}>
+        <div style={{ fontFamily: fontMono, fontSize: 11, letterSpacing: 3, color: colors.bordo, textTransform: "uppercase" }}>Ficha de personaje · Expediente {fileNumber}</div>
+        <h2 style={{ fontFamily: fontDisplay, fontSize: 30, margin: 0, fontWeight: "normal" }}>{politician.name}</h2>
+        <div style={{ fontFamily: fontMono, fontSize: 11, color: colors.bordoDeep, marginTop: 4 }}>{politician.epitaph}</div>
       </div>
-
-      {/* Inventario */}
-      <div style={{ padding: "20px 28px" }}>
-        <div style={{ fontFamily: fontMono, fontSize: "11px", letterSpacing: "3px", color: colors.bordo, textTransform: "uppercase", marginBottom: "12px" }}>
-          Inventario inicial
-        </div>
-        <ul style={{ listStyle: "none", margin: 0, padding: 0, fontFamily: fontBody, fontSize: "17px", color: colors.ink, lineHeight: 1.5 }}>
-          <li>› Un sello personal de lacre rojo, sin estrenar</li>
-          <li>› Un sobre lacrado con tres nombres escritos a lápiz</li>
-          <li>› Una llave que no abre cerradura conocida</li>
-          <li>› Un mapa de Madrid heredado, con marcas en tinta sepia</li>
-          <li>› Quince monedas de plata anteriores a 1972</li>
-        </ul>
-      </div>
+      <div style={{ textAlign: "right" }}><div style={{ fontFamily: fontDisplay, fontSize: 40, color: colors.bordo }}>{matchPercent}%</div><div style={{ fontFamily: fontMono, fontSize: 9 }}>Afinidad</div></div>
     </div>
-  );
+
+    <div style={{ padding: "20px 24px", borderBottom: `1px dashed ${colors.bordoDeep}` }}>
+      <div style={{ fontFamily: fontMono, fontSize: 11, letterSpacing: 3, color: colors.bordo, textTransform: "uppercase", marginBottom: 10 }}>Atributos mundanos</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>{renderRows(mundanos)}</div>
+      <div style={{ fontFamily: fontMono, fontSize: 11, letterSpacing: 3, color: colors.bordo, textTransform: "uppercase", margin: "16px 0 10px" }}>Atributos ocultistas</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>{renderRows(ocultistas)}</div>
+    </div>
+
+    <div style={{ padding: "16px 24px", borderBottom: `1px dashed ${colors.bordoDeep}` }}>
+      <div style={{ fontFamily: fontMono, fontSize: 11, letterSpacing: 3, color: colors.bordo, textTransform: "uppercase", marginBottom: 8 }}>Perks y coste</div>
+      <div style={{ fontFamily: fontBody, fontSize: 15 }}>Arquetipo: <strong>{perks.archetype}</strong></div>
+      <ul style={{ margin: "8px 0", paddingLeft: 18, fontFamily: fontBody, fontSize: 14 }}>{perks.perks.map((p) => <li key={p.name}><strong>{p.name}:</strong> {p.effect}</li>)}</ul>
+      <p style={{ margin: 0, fontFamily: fontBody, fontSize: 14, color: colors.bordoDeep }}><strong>Coste:</strong> {perks.drawback.cost}</p>
+    </div>
+
+    <div style={{ padding: "16px 24px" }}>
+      <div style={{ fontFamily: fontMono, fontSize: 11, letterSpacing: 3, color: colors.bordo, textTransform: "uppercase", marginBottom: 8 }}>Estados activos</div>
+      <ul style={{ margin: 0, paddingLeft: 18, fontFamily: fontBody, fontSize: 14 }}>{statuses.map((s) => <li key={s.name}><strong>{s.name}:</strong> {s.detail}</li>)}</ul>
+    </div>
+  </div>;
 }

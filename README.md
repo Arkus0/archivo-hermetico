@@ -48,3 +48,13 @@ lib/
 ## Aviso
 
 Las "justificaciones" mezclan hechos verificables con detalles míticos completamente inventados, en un registro de archivero delirante. Cualquier coincidencia con la realidad esotérica de la política española es deliberada pero indemostrable.
+
+
+## MVP RPG ampliado
+
+- Ficha dual con atributos mundanos y ocultistas.
+- Perks de arquetipo (beneficio + coste).
+- Estados activos (paranoia, protección, deuda, etc.).
+- Mapa táctico mejorado con filtros, búsqueda y localizaciones georreferenciadas.
+
+Ver guía de estilo narrativa en `docs-style-guide.md`.

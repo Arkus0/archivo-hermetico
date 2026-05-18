@@ -76,6 +76,7 @@ export default function Home() {
       stats,
       matchPercent: match.match_percent,
       fileNumber: result?.file_number ?? "",
+      answers,
     });
     setPhase("game");
     window.scrollTo({ top: 0, behavior: "instant" });
