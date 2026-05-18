@@ -6,6 +6,7 @@ import QuizScreen from "@/components/QuizScreen.jsx";
 import LoadingScreen from "@/components/LoadingScreen.jsx";
 import ResultScreen from "@/components/ResultScreen.jsx";
 import GameScreen from "@/components/GameScreen.jsx";
+import CharacterCreationScreen from "@/components/CharacterCreationScreen.jsx";
 import { QUESTION_BANK } from "@/lib/questions.js";
 import { runMatcher, shuffle } from "@/lib/matcher.js";
 import { computeStats } from "@/lib/stats.js";
@@ -18,6 +19,7 @@ export default function Home() {
   const [result, setResult] = useState(null);
   const [fileNumber, setFileNumber] = useState("");
   const [character, setCharacter] = useState(null);
+  const [pendingCharacter, setPendingCharacter] = useState(null);
 
   const startQuiz = (mode) => {
     const shuffled = shuffle(QUESTION_BANK).slice(0, mode);
@@ -71,13 +73,19 @@ export default function Home() {
 
   const handleEnterGame = (match) => {
     const stats = computeStats(match.id, questions, answers);
-    setCharacter({
+    setPendingCharacter({
       politician: { id: match.id, name: match.name, epitaph: match.epitaph },
       stats,
       matchPercent: match.match_percent,
       fileNumber: result?.file_number ?? "",
       answers,
     });
+    setPhase("creation");
+    window.scrollTo({ top: 0, behavior: "instant" });
+  };
+
+  const handleConfirmCharacter = (finalCharacter) => {
+    setCharacter(finalCharacter);
     setPhase("game");
     window.scrollTo({ top: 0, behavior: "instant" });
   };
@@ -103,6 +111,9 @@ export default function Home() {
       {phase === "loading" && <LoadingScreen />}
       {phase === "result" && result && (
         <ResultScreen result={result} onRestart={handleRestart} onEnter={handleEnterGame} />
+      )}
+      {phase === "creation" && pendingCharacter && (
+        <CharacterCreationScreen baseCharacter={pendingCharacter} onConfirm={handleConfirmCharacter} onBack={handleBackToResult} />
       )}
       {phase === "game" && character && (
         <GameScreen character={character} onBack={handleBackToResult} onRestart={handleRestart} />

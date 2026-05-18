@@ -6,6 +6,7 @@ import CharacterSheet from "./CharacterSheet.jsx";
 import MadridMap from "./MadridMap.jsx";
 import { colors, fontDisplay, fontBody, fontMono } from "@/lib/constants.js";
 import { MADRID_LOCATIONS, LOCATION_TYPE_LABEL } from "@/lib/madridLocations.js";
+import { NPC_EVENTS } from "@/lib/npcEvents.js";
 
 const TYPE_TO_STAT = {
   templo: "voluntad",
@@ -30,6 +31,7 @@ export default function GameScreen({ character, onBack, onRestart }) {
   const [influence, setInfluence] = useState(0);
   const [threat, setThreat] = useState(0);
   const [log, setLog] = useState([]);
+  const [eventLog, setEventLog] = useState([]);
 
   const selected = useMemo(() => MADRID_LOCATIONS.find((l) => l.id === selectedId) || MADRID_LOCATIONS[0], [selectedId]);
   const maxRounds = 8;
@@ -46,9 +48,15 @@ export default function GameScreen({ character, onBack, onRestart }) {
     const total = dice + Math.floor(statValue / 2);
     const success = total >= difficulty;
 
+
+    const event = NPC_EVENTS[Math.floor(Math.random() * NPC_EVENTS.length)];
+    const eventStat = character.stats?.[event.test] ?? 5;
+    const eventDice = Math.floor(Math.random() * 6) + 1;
+    const eventSuccess = (eventDice + Math.floor(eventStat / 2)) >= event.difficulty;
+
     setControl((prev) => ({ ...prev, [selected.id]: success }));
-    setInfluence((prev) => prev + (success ? 3 : 1));
-    setThreat((prev) => prev + (success ? 0 : 1));
+    setInfluence((prev) => prev + (success ? 3 : 1) + (eventSuccess ? event.success.influence : event.fail.influence));
+    setThreat((prev) => prev + (success ? 0 : 1) + (eventSuccess ? event.success.threat : event.fail.threat));
     setLog((prev) => [
       {
         id: `${round}-${selected.id}`,
@@ -58,6 +66,7 @@ export default function GameScreen({ character, onBack, onRestart }) {
       },
       ...prev,
     ].slice(0, 6));
+    setEventLog((prev) => [{ id: `${round}-${event.id}`, name: event.name, success: eventSuccess, detail: eventSuccess ? event.success.text : event.fail.text, flavor: event.flavor }, ...prev].slice(0, 4));
     setRound((r) => r + 1);
   };
 
@@ -112,6 +121,13 @@ export default function GameScreen({ character, onBack, onRestart }) {
                     </li>
                   ))}
                 </ul>
+                <div style={{ marginTop: 10, fontFamily: fontBody, fontSize: 14 }}>
+                  <strong>Eventos NPC (políticos):</strong>
+                  <ul style={{ margin: "6px 0 0", paddingLeft: 18 }}>
+                    {eventLog.length === 0 && <li>Aún no han aparecido intermediarios ni barones.</li>}
+                    {eventLog.map((e) => <li key={e.id}><strong>{e.success ? "Acuerdo" : "Choque"}</strong> · {e.name} · {e.flavor} {e.detail}</li>)}
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
