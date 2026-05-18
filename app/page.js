@@ -5,8 +5,10 @@ import IntroScreen from "@/components/IntroScreen.jsx";
 import QuizScreen from "@/components/QuizScreen.jsx";
 import LoadingScreen from "@/components/LoadingScreen.jsx";
 import ResultScreen from "@/components/ResultScreen.jsx";
+import GameScreen from "@/components/GameScreen.jsx";
 import { QUESTION_BANK } from "@/lib/questions.js";
 import { runMatcher, shuffle } from "@/lib/matcher.js";
+import { computeStats } from "@/lib/stats.js";
 
 export default function Home() {
   const [phase, setPhase] = useState("intro");
@@ -15,6 +17,7 @@ export default function Home() {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [result, setResult] = useState(null);
   const [fileNumber, setFileNumber] = useState("");
+  const [character, setCharacter] = useState(null);
 
   const startQuiz = (mode) => {
     const shuffled = shuffle(QUESTION_BANK).slice(0, mode);
@@ -62,6 +65,24 @@ export default function Home() {
     setAnswers([]);
     setCurrentIdx(0);
     setResult(null);
+    setCharacter(null);
+    window.scrollTo({ top: 0, behavior: "instant" });
+  };
+
+  const handleEnterGame = (match) => {
+    const stats = computeStats(match.id, questions, answers);
+    setCharacter({
+      politician: { id: match.id, name: match.name, epitaph: match.epitaph },
+      stats,
+      matchPercent: match.match_percent,
+      fileNumber: result?.file_number ?? "",
+    });
+    setPhase("game");
+    window.scrollTo({ top: 0, behavior: "instant" });
+  };
+
+  const handleBackToResult = () => {
+    setPhase("result");
     window.scrollTo({ top: 0, behavior: "instant" });
   };
 
@@ -79,7 +100,12 @@ export default function Home() {
         />
       )}
       {phase === "loading" && <LoadingScreen />}
-      {phase === "result" && result && <ResultScreen result={result} onRestart={handleRestart} />}
+      {phase === "result" && result && (
+        <ResultScreen result={result} onRestart={handleRestart} onEnter={handleEnterGame} />
+      )}
+      {phase === "game" && character && (
+        <GameScreen character={character} onBack={handleBackToResult} onRestart={handleRestart} />
+      )}
     </>
   );
 }
