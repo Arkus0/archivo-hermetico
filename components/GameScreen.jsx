@@ -18,7 +18,7 @@ export default function GameScreen({ character, onBack, onRestart }) {
             EL TABLERO DE LA VILLA
           </h1>
           <p style={{ fontFamily: fontBody, fontStyle: "italic", fontSize: "18px", color: colors.bordoDeep, margin: 0 }}>
-            Has tomado el cuerpo. Madrid se abre. Toca empezar a hacerse con España, despacito.
+            Has tomado el cuerpo. Madrid se despliega ante ti. Empieza, paso a paso, la lenta conquista de España.
           </p>
           <div style={{ marginTop: "10px", display: "flex", justifyContent: "center" }}>
             <MiniOrnament />
@@ -61,9 +61,9 @@ export default function GameScreen({ character, onBack, onRestart }) {
             Próximos capítulos · Borrador de la Logia
           </div>
           <ul style={{ listStyle: "none", margin: 0, padding: 0, fontFamily: fontBody, fontSize: "17px", color: colors.ink, lineHeight: 1.6 }}>
-            <li>› Cap. II — <em>Pactos de servilleta</em>: reclutar aliados en cada localización. Cada encuentro arriesga un atributo.</li>
-            <li>› Cap. III — <em>Maniobras de provincia</em>: extender la red más allá de Madrid (Sevilla, Bilbao, Barcelona, Santiago).</li>
-            <li>› Cap. IV — <em>Asalto a Moncloa</em>: investidura final. Si tu suma de Astucia + Verbo + Resistencia supera 22, el Consejo de Ministros se forma a tu favor.</li>
+            <li>› Cap. II — <em>Pactos de servilleta</em>: reclutar aliados en cada enclave. Cada encuentro pondrá en juego un atributo.</li>
+            <li>› Cap. III — <em>Maniobras de provincia</em>: extender la red más allá de Madrid — Sevilla, Bilbao, Barcelona, Santiago.</li>
+            <li>› Cap. IV — <em>Asalto a la Moncloa</em>: investidura final. Si la suma de Perspicacia, Carisma y Voluntad supera 22, el Consejo de Ministros se constituye a tu favor.</li>
           </ul>
         </div>
 

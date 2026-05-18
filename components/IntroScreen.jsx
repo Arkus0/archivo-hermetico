@@ -48,13 +48,14 @@ export default function IntroScreen({ onStart }) {
         <div style={{ borderTop: `1px solid ${colors.bordo}`, borderBottom: `1px solid ${colors.bordo}`, padding: "24px 16px", margin: "24px 0" }}>
           <p style={{ fontFamily: fontBody, fontSize: "20px", lineHeight: "1.55", color: colors.ink, margin: "0 0 16px 0" }}>
             El sujeto responderá a un cuestionario hermético-político. El Archivo
-            cruzará sus respuestas con los expedientes de treinta políticos españoles —
-            vivos, muertos, fusilados, exiliados, indultados, ascendidos a los
-            cielos — y emitirá un <em>dictamen de afinidad</em> en triple grado.
-            Al final podrá <em>encarnarse</em> en uno y abrir el plano hermético de Madrid.
+            cotejará sus respuestas con los expedientes de treinta políticos españoles
+            —vivos, muertos, fusilados, exiliados, indultados o ascendidos a los
+            cielos— y emitirá un <em>dictamen de afinidad</em> en triple grado.
+            Al término podrá <em>encarnarse</em> en uno de ellos y abrir el plano
+            hermético de Madrid.
           </p>
           <p style={{ fontFamily: fontBody, fontSize: "18px", fontStyle: "italic", color: colors.bordoDeep, margin: 0 }}>
-            La sinceridad no se exige, pero se nota.
+            La sinceridad no se exige; se delata sola.
           </p>
         </div>
 
@@ -66,7 +67,7 @@ export default function IntroScreen({ onStart }) {
             {[
               { n: 30, label: "Breve", desc: "diez minutos" },
               { n: 50, label: "Estándar", desc: "veinte minutos" },
-              { n: 80, label: "Exhaustivo", desc: "media tarde" },
+              { n: 80, label: "Exhaustivo", desc: "una tarde entera" },
             ].map((m) => {
               const selected = mode === m.n;
               return (

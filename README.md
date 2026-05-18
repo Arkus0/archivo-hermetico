@@ -1,15 +1,15 @@
 # Archivo Hermético
 
-Cuestionario hermético-político delirante que identifica al político español con el que el sujeto comparte mayor afinidad esotérica. Una logia inventada con humor seco y reverencia exigua.
+Cuestionario hermético-político delirante que identifica al político español con el que el sujeto comparte mayor afinidad esotérica. Una logia inventada, con humor seco y reverencia escasa.
 
 ## Cómo funciona
 
-1. El sujeto elige profundidad: breve (30), estándar (50) o exhaustivo (80) preguntas.
-2. El banco completo tiene 90 preguntas — se barajan en cada partida.
-3. El matcher determinista calcula afinidades con un pool de 30 políticos españoles (de Olivares y Godoy a Sánchez, Ayuso y Puigdemont, pasando por Pasionaria, Carrero o Franco).
-4. Algoritmo: cada respuesta del usuario se compara contra el perfil precompilado de cada político, con pesado IDF — las opciones raras pesan más que las comunes. Se devuelve un top 3 con porcentaje, justificación pre-escrita y coincidencias específicas.
+1. El sujeto elige la profundidad del expediente: breve (30), estándar (50) o exhaustivo (80) preguntas.
+2. El banco completo contiene 90 preguntas; se barajan en cada partida.
+3. El matcher determinista cruza las respuestas con un pool de 30 políticos españoles (de Olivares y Godoy a Sánchez, Ayuso o Puigdemont, pasando por Pasionaria, Carrero y Franco).
+4. Algoritmo: cada respuesta del usuario se compara contra el perfil precompilado de cada político, con pesado IDF — las opciones raras pesan más que las comunes. Se devuelve un top 3 con porcentaje, justificación preescrita y coincidencias específicas.
 
-Sin LLM. Todo precomputado. 100% client-side.
+Sin LLM. Todo precomputado. Cien por cien del lado del cliente.
 
 ## Stack
 
@@ -47,7 +47,7 @@ lib/
 
 ## Aviso
 
-Las "justificaciones" mezclan hechos verificables con detalles míticos completamente inventados, en un registro de archivero delirante. Cualquier coincidencia con la realidad esotérica de la política española es deliberada pero indemostrable.
+Las «justificaciones» mezclan hechos verificables con detalles míticos completamente inventados, en el registro de un archivero delirante. Cualquier coincidencia con la realidad esotérica de la política española es deliberada, aunque rigurosamente indemostrable.
 
 
 ## MVP RPG ampliado
@@ -55,6 +55,6 @@ Las "justificaciones" mezclan hechos verificables con detalles míticos completa
 - Ficha dual con atributos mundanos y ocultistas.
 - Perks de arquetipo (beneficio + coste).
 - Estados activos (paranoia, protección, deuda, etc.).
-- Mapa táctico mejorado con filtros, búsqueda y localizaciones georreferenciadas.
+- Mapa táctico ilustrado con filtros, búsqueda y enclaves georreferenciados.
 
-Ver guía de estilo narrativa en `docs-style-guide.md`.
+Guía de estilo narrativa en `docs-style-guide.md`.

@@ -5,18 +5,20 @@ import { Seal } from "./Seal.jsx";
 import { colors, fontBody, fontMono } from "@/lib/constants.js";
 
 const PHRASES = [
-  "Compulsando archivos de la logia...",
-  "Cruzando referencias con el Cronoarchivero Mayor...",
-  "Consultando el Almanaque Numantino...",
-  "Descodificando emblemas heredados...",
-  "Recuperando expedientes del Sumidero del Tedio...",
-  "Alineando astros con escaños...",
-  "Verificando juramentos rotos...",
-  "Compulsando deudas con el Vaticano...",
-  "Revisando rumores de Suresnes...",
-  "Pesando el alma del sujeto sobre balanza de ágata...",
-  "Buscando coincidencias en el Registro de Pactos Menores...",
-  "Hojeando el Tomo IX de los Apóstatas...",
+  "Compulsando los archivos de la Logia…",
+  "Cotejando con el Cronoarchivero Mayor…",
+  "Consultando el Almanaque Numantino…",
+  "Descifrando emblemas heredados…",
+  "Rescatando legajos del Sumidero del Tedio…",
+  "Alineando astros con escaños…",
+  "Verificando juramentos rotos…",
+  "Saldando viejas cuentas con el Vaticano…",
+  "Revisando los rumores de Suresnes…",
+  "Pesando el alma del sujeto en balanza de ágata…",
+  "Cruzando entradas del Registro de Pactos Menores…",
+  "Hojeando el Tomo IX de los Apóstatas…",
+  "Midiendo la sombra del sujeto al mediodía…",
+  "Anotando al margen del expediente con tinta sepia…",
 ];
 
 export default function LoadingScreen() {
