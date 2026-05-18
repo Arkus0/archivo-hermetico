@@ -309,8 +309,8 @@ export default function MadridMap({ selectedId: controlledSelectedId, onSelect, 
                 <circle cx={x} cy={y} r={r + 2} fill="url(#goldDisc)" stroke={colors.ink} strokeWidth="0.8" />
                 {/* Disco interior coloreado */}
                 <circle cx={x} cy={y} r={r} fill={c} stroke={colors.ink} strokeWidth="1.4" />
-                {controlled === true && <circle cx={x} cy={y} r={r + 5} fill="none" stroke="#2e5f25" strokeWidth="2" />}
-                {controlled === false && <circle cx={x} cy={y} r={r + 5} fill="none" stroke="#7a2721" strokeWidth="2" strokeDasharray="4 3" />}
+                {controlled === "controlled" && <circle cx={x} cy={y} r={r + 5} fill="none" stroke="#2e5f25" strokeWidth="2" />}
+                {controlled === "contested" && <circle cx={x} cy={y} r={r + 5} fill="none" stroke="#7a2721" strokeWidth="2" strokeDasharray="4 3" />}
                 {/* Glifo */}
                 <g transform={`translate(${x},${y})`}>
                   <TypeGlyph type={loc.type} size={r * 1.4} />
