@@ -12,6 +12,7 @@ const KIND_LABEL = {
   "doom-final": "Caída",
   defensive: "Defensa",
   round: "Ronda",
+  political: "Político",
   info: "Nota",
 };
 
@@ -24,6 +25,7 @@ const KIND_COLOR = {
   "doom-final": "#5C1820",
   defensive: "#3F5469",
   round: "#1A1410",
+  political: "#A88B3F",
   info: "#1A1410",
 };
 
@@ -36,7 +38,7 @@ export default function SceneLog({ log = [] }) {
       )}
       <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 6, maxHeight: 280, overflowY: "auto" }}>
         {log.map((entry) => (
-          <li key={entry.id} style={{ borderBottom: `1px dashed ${colors.bordoDeep}`, paddingBottom: 4 }}>
+          <li key={entry.id} style={{ borderBottom: `1px dashed ${colors.bordoDeep}`, paddingBottom: 4, background: entry.kind === "round" ? colors.paperDeep : "transparent", padding: entry.kind === "round" ? "4px 6px" : "0 0 4px" }}>
             <span style={{ fontFamily: fontMono, fontSize: 9, letterSpacing: 1.5, color: KIND_COLOR[entry.kind] || colors.ink, textTransform: "uppercase", marginRight: 6 }}>
               [r{entry.round}] {KIND_LABEL[entry.kind] || entry.kind}
             </span>

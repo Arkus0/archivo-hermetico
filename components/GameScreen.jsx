@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { MiniOrnament } from "./Seal.jsx";
+import PhaseAnnouncer from "./PhaseAnnouncer.jsx";
 import CharacterSheet from "./CharacterSheet.jsx";
 import MadridMap from "./MadridMap.jsx";
 import DialogueModal from "./DialogueModal.jsx";
@@ -48,6 +49,7 @@ function FinishCard({ finished, character, influence, threat, doom, quests }) {
 export default function GameScreen({ onBack, onRestart }) {
   const state = useGameState();
   const dispatch = useGameDispatch();
+  const [showPhaseCard, setShowPhaseCard] = useState(false);
   const character = state.character;
 
   const selectedId = state.selectedLocationId || MADRID_LOCATIONS[0].id;
@@ -76,7 +78,10 @@ export default function GameScreen({ onBack, onRestart }) {
 
   const handleSecure = () => dispatch({ type: ACTIONS.SECURE_ENCLAVE });
   const handleToggleDayNight = () => dispatch({ type: ACTIONS.TOGGLE_DAYNIGHT });
-  const handleEndRound = () => dispatch({ type: ACTIONS.END_ROUND });
+  const handleEndRound = () => {
+    dispatch({ type: ACTIONS.END_ROUND });
+    setShowPhaseCard(true);
+  };
 
   const handlePoliticianClick = (politicianId) => {
     const npcId = POLITICIAN_TO_NPC[politicianId];
@@ -98,7 +103,8 @@ export default function GameScreen({ onBack, onRestart }) {
     return { politicianId: pid, npcId, faction: getPoliticianFaction(pid), name: getNpc(npcId)?.name || pid };
   });
 
-  const headerLine = `Ronda ${Math.min(state.clock.round, state.clock.maxRounds)}/${state.clock.maxRounds} · ${state.clock.daynight === "night" ? "Noche" : "Día"} · PA ${apShown}/${maxApShown} · Infl. ${state.influence} · Amen. ${state.threat}/6`;
+  const apPips = Array.from({ length: maxApShown }, (_, i) => (i < apShown ? "●" : "○")).join(" ");
+  const roundDisplay = Math.min(state.clock.round, state.clock.maxRounds);
 
   return (
     <div style={{ minHeight: "100vh", padding: "32px 16px 64px 16px", color: colors.ink }}>
@@ -141,8 +147,29 @@ export default function GameScreen({ onBack, onRestart }) {
             />
 
             <div style={{ border: `1px solid ${colors.ink}`, background: colors.paperLight, boxShadow: `3px 3px 0 ${colors.bordo}`, padding: 16 }}>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 10, justifyContent: "space-between", alignItems: "center" }}>
-                <div style={{ fontFamily: fontMono, fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: colors.bordo }}>{headerLine}</div>
+              {/* Zona A: estado permanente */}
+              <div style={{ marginBottom: 12 }}>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 16, alignItems: "baseline", marginBottom: 6 }}>
+                  <span style={{ fontFamily: fontMono, fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: colors.bordo }}>
+                    RONDA {roundDisplay}/{state.clock.maxRounds} · {state.clock.daynight === "night" ? "NOCHE" : "DÍA"}
+                  </span>
+                  <span style={{ fontFamily: fontMono, fontSize: 12, letterSpacing: 1, color: colors.ink }} title={`${apShown} de ${maxApShown} puntos de acción`}>
+                    PA {apPips}
+                  </span>
+                  <span style={{ fontFamily: fontMono, fontSize: 11, color: colors.ink }}>Infl. <strong>{state.influence}</strong></span>
+                  <span style={{ fontFamily: fontMono, fontSize: 11, color: state.threat >= 4 ? colors.bordo : colors.ink }}>Amen. <strong>{state.threat}/6</strong></span>
+                  <span style={{ fontFamily: fontMono, fontSize: 11, color: state.doom.value >= 8 ? colors.bordo : colors.gold }}>Doom <strong>{state.doom.value}/{state.doom.max}</strong></span>
+                </div>
+                <div style={{ fontFamily: fontDisplay, fontSize: 16, color: colors.bordo, marginBottom: 2 }}>
+                  {character?.campaignProfile?.primaryLabel || "Dominio político"}
+                </div>
+                <div style={{ fontFamily: fontMono, fontSize: 10, letterSpacing: 1, color: colors.bordoDeep, textTransform: "uppercase" }}>
+                  {character?.campaignProfile?.secondaryLabel || "Resolver dos tramas"}
+                </div>
+              </div>
+
+              {/* Zona B: acciones */}
+              <div style={{ borderTop: `1px dashed ${colors.bordoDeep}`, paddingTop: 10 }}>
                 {!isOver ? (
                   <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                     <button disabled={selectedCost > apShown} onClick={handleResolve} style={{ fontFamily: fontMono, fontSize: 12, letterSpacing: 2, textTransform: "uppercase", background: colors.ink, color: colors.paperLight, border: `1px solid ${colors.ink}`, padding: "10px 14px", cursor: selectedCost > apShown ? "not-allowed" : "pointer", opacity: selectedCost > apShown ? 0.5 : 1 }}>
@@ -161,20 +188,17 @@ export default function GameScreen({ onBack, onRestart }) {
                     {state.finished === "victory" ? "Victoria táctica" : "Derrota táctica"}
                   </strong>
                 )}
-              </div>
-              <p style={{ margin: "10px 0 6px", fontFamily: fontBody, fontSize: 14 }}>
-                Enclave activo: <strong>{selected?.name}</strong> · Prueba de <strong>{LOCATION_TYPE_LABEL[selected?.type]}</strong> · Estado <strong>{selectedControlState}</strong>.
-              </p>
-              <p style={{ margin: "4px 0 10px", fontFamily: fontBody, fontSize: 13, color: colors.bordoDeep }}>
-                Objetivo: <strong>{character?.campaignProfile?.primaryLabel || "Dominio político"}</strong> · Secundario: {character?.campaignProfile?.secondaryLabel || "Resolver dos tramas"}.
-              </p>
-              {sponsorList.length > 0 && (
-                <div style={{ fontFamily: fontMono, fontSize: 11, color: colors.bordoDeep, letterSpacing: 1, textTransform: "uppercase", marginTop: 6, paddingTop: 6, borderTop: `1px dashed ${colors.bordoDeep}` }}>
-                  Patrocinadores · {sponsorList.map((s) => s.name).join(" · ")}
+                <p style={{ margin: "10px 0 4px", fontFamily: fontBody, fontSize: 14 }}>
+                  Enclave activo: <strong>{selected?.name}</strong> · Prueba de <strong>{LOCATION_TYPE_LABEL[selected?.type]}</strong> · Estado <strong>{selectedControlState}</strong>.
+                </p>
+                {sponsorList.length > 0 && (
+                  <div style={{ fontFamily: fontMono, fontSize: 11, color: colors.bordoDeep, letterSpacing: 1, textTransform: "uppercase", marginTop: 6, paddingTop: 6, borderTop: `1px dashed ${colors.bordoDeep}` }}>
+                    Patrocinadores · {sponsorList.map((s) => s.name).join(" · ")}
+                  </div>
+                )}
+                <div style={{ marginTop: 8, fontFamily: fontMono, fontSize: 10, letterSpacing: 1, color: colors.bordoDeep }}>
+                  Click en marcador del enclave: seleccionar · Click en orbital de patrocinador: abrir conversación (1 PA).
                 </div>
-              )}
-              <div style={{ marginTop: 12, fontFamily: fontMono, fontSize: 10, letterSpacing: 1, color: colors.bordoDeep }}>
-                Click en marcador del enclave: seleccionar · Click en orbital de patrocinador: abrir conversación (1 PA).
               </div>
             </div>
 
@@ -195,6 +219,17 @@ export default function GameScreen({ onBack, onRestart }) {
       </div>
 
       <DialogueModal />
+      {showPhaseCard && !isOver && (
+        <PhaseAnnouncer
+          round={roundDisplay}
+          maxRounds={state.clock.maxRounds}
+          daynight={state.clock.daynight}
+          ap={apShown}
+          maxAp={maxApShown}
+          objective={character?.campaignProfile?.primaryLabel}
+          onDismiss={() => setShowPhaseCard(false)}
+        />
+      )}
     </div>
   );
 }
