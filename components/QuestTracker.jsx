@@ -10,6 +10,13 @@ export default function QuestTracker({ state }) {
 
   return (
     <div style={{ border: `1px solid ${colors.ink}`, background: colors.paperLight, boxShadow: `3px 3px 0 ${colors.bordo}`, padding: 14 }}>
+      {state.character?.campaignProfile && (
+        <div style={{ borderBottom: `1px dashed ${colors.bordo}`, paddingBottom: 10, marginBottom: 12 }}>
+          <div style={{ fontFamily: fontMono, fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: colors.bordo }}>OBJETIVO DE CAMPAÑA</div>
+          <div style={{ fontFamily: fontDisplay, fontSize: 16, margin: "4px 0 2px" }}>{state.character.campaignProfile.primaryLabel}</div>
+          <div style={{ fontFamily: fontMono, fontSize: 10, color: colors.bordoDeep }}>{state.character.campaignProfile.secondaryLabel}</div>
+        </div>
+      )}
       <div style={{ fontFamily: fontMono, fontSize: 11, letterSpacing: 3, color: colors.bordo, textTransform: "uppercase", marginBottom: 10 }}>Tramas en curso</div>
       {active.length === 0 && (
         <p style={{ fontFamily: fontDisplay, fontSize: 14, color: colors.bordoDeep, fontStyle: "italic", margin: 0 }}>Aún no se ha abierto trama alguna.</p>

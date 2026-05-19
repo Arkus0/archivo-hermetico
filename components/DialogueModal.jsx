@@ -28,9 +28,14 @@ function optionEnabled(opt, state) {
 }
 
 function DoomEventCard({ event, onDismiss }) {
+  const isPolitical = !!event.isPolitical;
+  const accentColor = isPolitical ? colors.gold : colors.bordo;
+  const header = isPolitical
+    ? `Evento político · ronda ${event.round || ""}`
+    : `Reloj de la Logia · umbral ${event.threshold}`;
   return (
-    <div style={{ borderTop: `2px double ${colors.bordo}`, paddingTop: 14, marginTop: 16 }}>
-      <div style={{ fontFamily: fontMono, fontSize: 11, letterSpacing: 3, color: colors.bordo, textTransform: "uppercase" }}>Reloj de la Logia · umbral {event.threshold}</div>
+    <div style={{ borderTop: `2px double ${accentColor}`, paddingTop: 14, marginTop: 16 }}>
+      <div style={{ fontFamily: fontMono, fontSize: 11, letterSpacing: 3, color: accentColor, textTransform: "uppercase" }}>{header}</div>
       <h2 style={{ fontFamily: fontDisplay, fontSize: 26, margin: "6px 0 10px", fontWeight: "normal" }}>{event.title}</h2>
       <p style={{ fontFamily: fontBody, fontSize: 17, lineHeight: 1.55, margin: "0 0 16px" }}>{event.text}</p>
       <button onClick={onDismiss} style={{ fontFamily: fontMono, fontSize: 12, letterSpacing: 2, textTransform: "uppercase", background: colors.ink, color: colors.paperLight, border: `1px solid ${colors.ink}`, padding: "10px 18px", cursor: "pointer" }}>
@@ -100,7 +105,11 @@ export default function DialogueModal() {
 
               {scene?.lastCheck && <CheckResultToast check={scene.lastCheck} />}
 
-              <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 14 }}>
+              <div style={{ borderTop: `1px solid ${colors.bordo}`, borderBottom: `1px solid ${colors.bordo}`, padding: "6px 10px", margin: "12px 0 0", background: colors.paperDeep }}>
+                <span style={{ fontFamily: fontMono, fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: colors.bordo }}>MECÁNICAS · elige acción</span>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 10 }}>
                 {content.options.map((opt) => {
                   const e = optionEnabled(opt, state);
                   return (
